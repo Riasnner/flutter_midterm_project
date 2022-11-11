@@ -11,24 +11,34 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Settings"),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              // Navigator.popAndPushNamed(context, LoginPage.routeName);
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                LoginPage.routeName, (Route<dynamic> route) => false);
-            },
-            child: const Padding(padding: EdgeInsets.only(right: 15.0),
-              child: Icon(
-                Icons.logout, 
-                size: 30
-              ),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(
+            'assets/background.jpg'
             ),
-          )
-        ],
+            fit: BoxFit.cover,
+          ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: const Text("Settings"),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  LoginPage.routeName, (Route<dynamic> route) => false);
+              },
+              child: const Padding(padding: EdgeInsets.only(right: 15.0),
+                child: Icon(
+                  Icons.logout, 
+                  size: 30
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
