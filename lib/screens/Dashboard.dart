@@ -37,7 +37,7 @@ class _DashboardState extends State<Dashboard> {
           ),
           body: const Center(
             child: Text(
-              "Welcome !",
+              "Welcome!",
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
