@@ -6,6 +6,16 @@ class AuthService{
 
   GoogleSignInAccount? user;
 
+  // Future<User> handleSignUp(email, password) async {
+  //   final FirebaseAuth auth = FirebaseAuth.instance;
+
+  //   UserCredential result = await auth.createUserWithEmailAndPassword(
+  //       email: email, password: password);
+  //   final User user = result.user!;
+
+  //   return user;
+  // }
+
   Future <UserCredential> signInWithGoogle() async{
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;

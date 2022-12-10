@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midterm_project/screens/Dashboard.dart';
 import 'package:flutter_midterm_project/screens/SignUpPage.dart';
@@ -58,20 +59,31 @@ class _LoginPageState extends State<LoginPage> {
                         text: "Login", 
                         iconData: Icons.login, 
                         onPress: () {
-                          loginWithProvider();
-                          // Navigator.pushReplacementNamed(
-                          //   context, 
-                          //   Dashboard.routeName);
+                           loginEmailPassword();
                         }),
                       const SizedBox(
                         height: 20.0,
                       ),
                       PrimaryButton(
-                        text: "Don't have an account? Sign up here", 
-                        iconData: Icons.app_registration, 
+                        text: "Sign In Using Google", 
+                        iconData: Icons.login, 
                         onPress: () {
+                           loginWithProvider();
+                        }),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Center(
+                      child: GestureDetector(
+                        onTap: () {
                           Navigator.pushReplacementNamed(context, SignUpPage.routeName);
-                      }),
+                        },
+                        child: const Text(
+                          "Don't have an account? Sign up here",
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                      ),
+                    ),
                     ],
                   ),
                 ),
@@ -99,7 +111,30 @@ class _LoginPageState extends State<LoginPage> {
     }catch(e){
       print(e.toString());
     }
+    setState(() {
+      isLoginIn = false;
+    });
+  }
 
+  loginEmailPassword() async{
+    try {
+      setState(() {
+        isLoginIn = true;
+      });
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text
+      );
+      print(credential);
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacementNamed(context, Dashboard.routeName);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
     setState(() {
       isLoginIn = false;
     });

@@ -1,10 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midterm_project/screens/loginPage.dart';
-import 'package:flutter_midterm_project/widget/ConfirmPasswordField.dart';
 import 'package:flutter_midterm_project/widget/EmailTextField.dart';
 import 'package:flutter_midterm_project/widget/PasswordField.dart';
 import 'package:flutter_midterm_project/widget/PrimaryButton.dart';
-import 'package:flutter_midterm_project/widget/NameTextField.dart';
 import 'package:flutter_midterm_project/widget/TitleName.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -15,12 +14,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController firstLastController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
   bool obscurePassword = true;
   bool obscurePasswordF = true;
   @override
@@ -36,22 +31,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: Column(
                   children: [
                     TitleName(text: "SIGN UP"),
-                    NameTextField(
-                      labelText: "First Name", 
-                      hintText: "Enter your First Name", 
-                      controller: firstNameController, 
-                      textInputType: TextInputType.name),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    NameTextField(
-                      labelText: "Last Name", 
-                      hintText: "Enter your Last Name", 
-                      controller: firstLastController, 
-                      textInputType: TextInputType.name),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
+                    
                     EmailTextField(
                       labelText: "Email Address", 
                       hintText: "Enter your Email Address", 
@@ -70,12 +50,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(
                       height: 10.0,
                     ),
-                    ConfirmPasswordField(
-                      obscureTextF: obscurePasswordF, 
-                      labelText: "Confirm Password", 
-                      hintText: "Re-enter your Password", 
-                      controller: confirmPasswordController
-                      ),
                     const SizedBox(
                       height: 20.0,
                     ),
@@ -83,17 +57,22 @@ class _SignUpPageState extends State<SignUpPage> {
                       text: "Signup", 
                       iconData: Icons.app_registration, 
                       onPress: () {
-                        Navigator.pushReplacementNamed(context, LoginPage.routeName);
+                        signingUp();
                     }),
                     const SizedBox(
                       height: 20.0,
                     ),
-                    PrimaryButton(
-                      text: "Already have an account? Login here", 
-                      iconData: Icons.login, 
-                      onPress: () {
-                        Navigator.pushReplacementNamed(context, LoginPage.routeName);
-                    }),
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, LoginPage.routeName);
+                        },
+                        child: const Text(
+                          "Already have an account? Login here",
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -108,4 +87,24 @@ class _SignUpPageState extends State<SignUpPage> {
       obscurePassword = !obscurePassword;
     });
   }
+
+  signingUp() async{
+    try {
+      final user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacementNamed(context, LoginPage.routeName);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
 }
