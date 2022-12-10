@@ -58,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                         text: "Login", 
                         iconData: Icons.login, 
                         onPress: () {
+                          loginWithProvider();
                           // Navigator.pushReplacementNamed(
                           //   context, 
                           //   Dashboard.routeName);
