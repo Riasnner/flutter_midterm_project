@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_midterm_project/screens/Settings.dart';
-import 'package:flutter_midterm_project/widget/EmailTextField.dart';
 
 class Dashboard extends StatefulWidget {
   static String routeName = "/dashboard";
@@ -12,7 +11,6 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings.arguments as EmailTextField;
     return Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -37,10 +35,10 @@ class _DashboardState extends State<Dashboard> {
               )
             ],
           ),
-          body: Center(
+          body: const Center(
             child: Text(
-              "Welcome ${arg.controller.text}!",
-              style: const TextStyle(
+              "Welcome !",
+              style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Colors.lightBlueAccent,
