@@ -4,11 +4,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthService{
   static GoogleSignIn googleSignIn = GoogleSignIn();
-  final storage = new FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   GoogleSignInAccount? user; 
 
-  Future <UserCredential> signInEmailPass(email, password) async{
+  Future <UserCredential> signInEmailPass(var email, var password) async{
     final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password
@@ -19,13 +19,18 @@ class AuthService{
     return user;
   }
 
-  Future <UserCredential> signUpEmailPass(email, password) async{
+  Future <UserCredential> signUpEmailPass(var email, var password) async{
     final user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
     
     return user;
+  }
+
+  Future readData(String token) async{
+    var data = await storage.read(key: token);
+    return data;
   }
 
   Future <UserCredential> signInWithGoogle() async{
@@ -37,17 +42,19 @@ class AuthService{
     );
 
     await storage.write(key: 'token', value: googleAuth?.accessToken);
-    // String? value = await storage.read(key: 'token');
-    // print("this is the access token");
-    // print(value);
 
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   Future logout() async{
     try{
-      await googleSignIn.disconnect();
-      await FirebaseAuth.instance.signOut();
+      if (googleSignIn.currentUser != null){
+        await googleSignIn.disconnect();
+        await FirebaseAuth.instance.signOut();}
+      else{
+        await googleSignIn.signOut();
+        await FirebaseAuth.instance.signOut();}
+      await storage.delete(key: 'token');
     }catch(e){
       return null;
     }

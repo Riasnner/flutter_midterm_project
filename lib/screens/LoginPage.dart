@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool obscurePassword = true;
-  bool isLoginIn = false;
+  bool isLoggedIn = false;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         child: Center (
           child: ModalProgressHUD(
-            inAsyncCall: isLoginIn,
+            inAsyncCall: isLoggedIn,
             child: SingleChildScrollView(
               child: Center(
                 child: Container(
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
   loginWithProvider() async{
     try{
       setState(() {
-        isLoginIn = true;
+        isLoggedIn = true;
       });
       var user = await _authService.signInWithGoogle();
       // ignore: use_build_context_synchronously
@@ -112,14 +112,14 @@ class _LoginPageState extends State<LoginPage> {
       print(e.toString());
     }
     setState(() {
-      isLoginIn = false;
+      isLoggedIn = false;
     });
   }
 
   loginEmailPassword() async{
     try {
       setState(() {
-        isLoginIn = true;
+        isLoggedIn = true;
       });
       var user = await _authService.signInEmailPass(emailController.text, passwordController.text);
       // ignore: use_build_context_synchronously
@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
     setState(() {
-      isLoginIn = false;
+      isLoggedIn = false;
     });
   }
 }
