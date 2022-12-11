@@ -5,6 +5,7 @@ import 'package:flutter_midterm_project/widget/EmailTextField.dart';
 import 'package:flutter_midterm_project/widget/PasswordField.dart';
 import 'package:flutter_midterm_project/widget/PrimaryButton.dart';
 import 'package:flutter_midterm_project/widget/TitleName.dart';
+import 'package:flutter_midterm_project/services/AuthService.dart';
 
 class SignUpPage extends StatefulWidget {
   static String routeName = "/register";
@@ -14,6 +15,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  AuthService _authService = AuthService();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool obscurePassword = true;
@@ -90,10 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   signingUp() async{
     try {
-      final user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+      var user = await _authService.signUpEmailPass(emailController.text, passwordController.text);
       // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, LoginPage.routeName);
     } on FirebaseAuthException catch (e) {

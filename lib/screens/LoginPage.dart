@@ -121,11 +121,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isLoginIn = true;
       });
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text
-      );
-      print(credential);
+      var user = await _authService.signInEmailPass(emailController.text, passwordController.text);
       // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, Dashboard.routeName);
     } on FirebaseAuthException catch (e) {
